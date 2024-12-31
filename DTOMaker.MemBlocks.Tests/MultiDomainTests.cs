@@ -17,11 +17,11 @@ namespace DTOMaker.MemBlocks.Tests
                 using DTOMaker.Models.MemBlocks;
                 namespace MyOrg.DomainA
                 {
-                    [Entity] [Layout(LayoutMethod.SequentialV1)] public interface IMyDTO { }
+                    [Entity] [Layout(LayoutMethod.Linear)] public interface IMyDTO { }
                 }
                 namespace MyOrg.DomainB
                 {
-                    [Entity] [Layout(LayoutMethod.SequentialV1)] public interface IMyDTO { }
+                    [Entity] [Layout(LayoutMethod.Linear)] public interface IMyDTO { }
                 }
                 """;
 

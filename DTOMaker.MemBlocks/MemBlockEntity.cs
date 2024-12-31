@@ -58,7 +58,7 @@ namespace DTOMaker.MemBlocks
             return LayoutMethod switch
             {
                 LayoutMethod.Explicit => null,
-                LayoutMethod.SequentialV1 => null,
+                LayoutMethod.Linear => null,
                 LayoutMethod.Undefined => new SyntaxDiagnostic(
                         DiagnosticId.DMMB0004, "Invalid layout method", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
                         $"LayoutMethod is not defined."),
@@ -75,7 +75,7 @@ namespace DTOMaker.MemBlocks
 
             if (LayoutMethod == LayoutMethod.Undefined) return null;
 
-            foreach (var member in Members.Values.OrderBy(m => m.Sequence))
+            foreach (var member in Members.Values.OrderBy(m => m.Sequence).OfType<MemBlockMember>())
             {
                 if (member.FieldOffset < 0)
                 {

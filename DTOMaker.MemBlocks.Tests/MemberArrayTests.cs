@@ -21,11 +21,11 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)]
-                        [Length(8)]
+                        [Capacity(8)]
                         ReadOnlyMemory<double> Values { get; set; }
                     }
                 }
@@ -54,11 +54,11 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
-                        [Length(3)]
+                        [Capacity(3)]
                         ReadOnlyMemory<double> Values { get; set; }
                     }
                 }
@@ -71,7 +71,7 @@ namespace DTOMaker.MemBlocks.Tests
 
             var errors = generatorResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToArray();
             errors.Should().HaveCount(2);
-            errors[0].GetMessage().Should().Be("ArrayLength (3) is invalid. ArrayLength must be a whole power of 2 between 1 and 1024.");
+            errors[0].GetMessage().Should().Be("ArrayCapacity (3) is invalid. ArrayCapacity must be a whole power of 2 between 1 and 1024.");
             errors[1].GetMessage().Should().Be("Total length (24) is invalid. Total length must be a whole power of 2 between 1 and 1024.");
         }
 
@@ -85,11 +85,11 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
-                        [Length(256)]
+                        [Capacity(256)]
                         ReadOnlyMemory<double> Values { get; set; }
                     }
                 }
@@ -115,11 +115,11 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
-                        [Length(8)]
+                        [Capacity(8)]
                         ReadOnlyMemory<byte> Values { get; set; }
                     }
                 }

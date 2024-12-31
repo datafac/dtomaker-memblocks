@@ -9,7 +9,7 @@ using Xunit;
 
 namespace DTOMaker.MemBlocks.Tests
 {
-    public class SequentialLayoutTests
+    public class LinearLayoutTests
     {
         [Fact]
         public async Task Happy01_NoMembers()
@@ -21,7 +21,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                     }
@@ -52,7 +52,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
@@ -84,7 +84,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] double Field1 { get; set; }
@@ -118,7 +118,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Obsolete("Removed", true)]
@@ -152,19 +152,19 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)]
-                        [Length(64)]
+                        [StrLen(64)]
                         string FamilyName { get; set; }
 
                         [Member(2)]
-                        [Length(64)]
+                        [StrLen(64)]
                         string GivenNames { get; set; }
 
                         [Member(3)]
-                        [Length(64)]
+                        [StrLen(64)]
                         string OtherNames_Value { get; set; }
 
                         [Member(4)] bool OtherNames_HasValue { get; set; }
@@ -197,7 +197,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)]  bool    Field1  { get; set; }
@@ -244,7 +244,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
@@ -274,7 +274,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
@@ -303,7 +303,7 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
@@ -318,9 +318,10 @@ namespace DTOMaker.MemBlocks.Tests
             generatorResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Warning).Should().BeEmpty();
 
             var errors = generatorResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToArray();
-            errors.Should().HaveCount(2);
+            errors.Should().HaveCount(3);
             errors[0].GetMessage().Should().Be("Nullable type 'String?' is not supported.");
             errors[1].GetMessage().Should().Be("FieldLength (0) is invalid. FieldLength must be a whole power of 2 between 1 and 1024.");
+            errors[2].GetMessage().Should().Be("StringLength (0) is invalid. StringLength must be a whole power of 2 between 1 and 1024.");
         }
 
         [Fact]
@@ -333,11 +334,11 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO
                     {
                         [Member(1)] 
-                        [Length(31)]
+                        [StrLen(31)]
                         string Field1 { get; set; }
                     }
                 }
@@ -349,8 +350,9 @@ namespace DTOMaker.MemBlocks.Tests
             generatorResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Warning).Should().BeEmpty();
 
             var errors = generatorResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToArray();
-            errors.Should().HaveCount(1);
+            errors.Should().HaveCount(2);
             errors[0].GetMessage().Should().Be("FieldLength (31) is invalid. FieldLength must be a whole power of 2 between 1 and 1024.");
+            errors[1].GetMessage().Should().Be("StringLength (31) is invalid. StringLength must be a whole power of 2 between 1 and 1024.");
         }
 
         [Fact]
@@ -362,10 +364,10 @@ namespace DTOMaker.MemBlocks.Tests
                 using DTOMaker.Models.MemBlocks;
                 namespace MyOrg.Models
                 {
-                    [Entity] [Id("12345")][Layout(LayoutMethod.SequentialV1)]
+                    [Entity] [Id("12345")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO1 { }
 
-                    [Entity] [Id("12345")][Layout(LayoutMethod.SequentialV1)]
+                    [Entity] [Id("12345")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO2 { }
                 }
                 """;

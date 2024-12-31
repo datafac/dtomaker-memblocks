@@ -8,8 +8,9 @@ namespace DTOMaker.MemBlocks
     public readonly struct IdAttribute { }
     public readonly struct LayoutAttribute { }
     public readonly struct OffsetAttribute { }
-    public readonly struct LengthAttribute { }
     public readonly struct EndianAttribute { }
+    public readonly struct StrLenAttribute { }
+    public readonly struct CapacityAttribute { }
 
     internal class MemBlocksSyntaxReceiver : SyntaxReceiverBase
     {
@@ -50,27 +51,33 @@ namespace DTOMaker.MemBlocks
         {
             if (baseMember is MemBlockMember member)
             {
-                if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(OffsetAttribute)) is AttributeData memberOffsetAttr)
+                if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(OffsetAttribute)) is AttributeData offsetAttr)
                 {
                     member.HasOffsetAttribute = true;
-                    var attributeArguments = memberOffsetAttr.ConstructorArguments;
+                    var attributeArguments = offsetAttr.ConstructorArguments;
                     if (CheckAttributeArguments(nameof(OffsetAttribute), attributeArguments, 1, member, location))
                     {
                         TryGetAttributeArgumentValue<int>(member, location, attributeArguments, 0, (value) => { member.FieldOffset = value; });
                     }
                 }
-                if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(LengthAttribute)) is AttributeData memberLengthAttr)
+                if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(StrLenAttribute)) is AttributeData strLenAttr)
                 {
-                    member.HasLengthAttribute = true;
-                    var attributeArguments = memberLengthAttr.ConstructorArguments;
-                    if (CheckAttributeArguments(nameof(LengthAttribute), attributeArguments, 1, member, location))
+                    var attributeArguments = strLenAttr.ConstructorArguments;
+                    if (CheckAttributeArguments(nameof(StrLenAttribute), attributeArguments, 1, member, location))
                     {
-                        TryGetAttributeArgumentValue<int>(member, location, attributeArguments, 0, (value) => { member.ArrayLength = value; });
+                        TryGetAttributeArgumentValue<int>(member, location, attributeArguments, 0, (value) => { member.StringLength = value; });
+                    }
+                }
+                if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(CapacityAttribute)) is AttributeData capacityAttr)
+                {
+                    var attributeArguments = capacityAttr.ConstructorArguments;
+                    if (CheckAttributeArguments(nameof(CapacityAttribute), attributeArguments, 1, member, location))
+                    {
+                        TryGetAttributeArgumentValue<int>(member, location, attributeArguments, 0, (value) => { member.ArrayCapacity = value; });
                     }
                 }
                 if (memberAttributes.FirstOrDefault(a => a.AttributeClass?.Name == nameof(EndianAttribute)) is AttributeData memberEndianAttr)
                 {
-                    member.HasEndianAttribute = true;
                     var attributeArguments = memberEndianAttr.ConstructorArguments;
                     if (CheckAttributeArguments(nameof(EndianAttribute), attributeArguments, 1, member, location))
                     {

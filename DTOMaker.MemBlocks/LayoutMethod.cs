@@ -4,6 +4,6 @@
     {
         Undefined = 0,
         Explicit = 1,
-        SequentialV1 = 2,
+        Linear = 2,
     }
 }

@@ -23,12 +23,27 @@
         Explicit = 1,
 
         /// <summary>
-        /// Member memory layout is automatic and is assigned sequentially in member
-        /// sequence order. It is important that the member sequence and data type do
-        /// not ever change, to ensure consistent backward compatibility. With this
+        /// Member memory layout is automatic and is assigned in sequence order.
+        /// The location assigned is always the next higher available block with
+        /// the correct size and alignment.
+        /// 
+        /// It is important that the member sequence and data type do not ever 
+        /// change, to ensure consistent backward compatibility. With this
         /// method, the entity memory block length can be limited, or left undefined
         /// to allow automatic growth.
         /// </summary>
-        SequentialV1 = 2,
+        Linear = 2,
+
+        /// <summary>
+        /// Member memory layout is automatic and is assigned in sequence order.
+        /// The location assigned is always the first available, of the correct
+        /// size and alignment, closest to the previously assigned member.
+        /// 
+        /// It is important that the member sequence and data type do not ever 
+        /// change, to ensure consistent backward compatibility. With this
+        /// method, the entity memory block length can be limited, or left undefined
+        /// to allow automatic growth.
+        /// </summary>
+        //todo Compact = 3,
     }
 }

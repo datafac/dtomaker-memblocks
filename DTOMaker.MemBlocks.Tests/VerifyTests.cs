@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using FluentAssertions;
+using System;
+using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
 

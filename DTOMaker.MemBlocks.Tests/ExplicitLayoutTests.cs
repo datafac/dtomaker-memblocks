@@ -23,7 +23,7 @@ namespace DTOMaker.MemBlocks.Tests
         {
             LayoutMethodsAreEquivalent(DTOMaker.Models.MemBlocks.LayoutMethod.Undefined, DTOMaker.MemBlocks.LayoutMethod.Undefined);
             LayoutMethodsAreEquivalent(DTOMaker.Models.MemBlocks.LayoutMethod.Explicit, DTOMaker.MemBlocks.LayoutMethod.Explicit);
-            LayoutMethodsAreEquivalent(DTOMaker.Models.MemBlocks.LayoutMethod.SequentialV1, DTOMaker.MemBlocks.LayoutMethod.SequentialV1);
+            LayoutMethodsAreEquivalent(DTOMaker.Models.MemBlocks.LayoutMethod.Linear, DTOMaker.MemBlocks.LayoutMethod.Linear);
         }
 
         [Fact]
@@ -32,8 +32,9 @@ namespace DTOMaker.MemBlocks.Tests
             nameof(DTOMaker.MemBlocks.LayoutAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.LayoutAttribute));
             nameof(DTOMaker.MemBlocks.IdAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.IdAttribute));
             nameof(DTOMaker.MemBlocks.OffsetAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.OffsetAttribute));
-            nameof(DTOMaker.MemBlocks.LengthAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.LengthAttribute));
             nameof(DTOMaker.MemBlocks.EndianAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.EndianAttribute));
+            nameof(DTOMaker.MemBlocks.StrLenAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.StrLenAttribute));
+            nameof(DTOMaker.MemBlocks.CapacityAttribute).Should().Be(nameof(DTOMaker.Models.MemBlocks.CapacityAttribute));
         }
     }
     public class ExplicitLayoutTests

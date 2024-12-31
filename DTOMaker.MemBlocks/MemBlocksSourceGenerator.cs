@@ -78,8 +78,8 @@ namespace DTOMaker.MemBlocks
                 case LayoutMethod.Explicit:
                     ExplicitLayoutMembers(entity);
                     break;
-                case LayoutMethod.SequentialV1:
-                    SequentialLayoutMembers(entity);
+                case LayoutMethod.Linear:
+                    LinearLayoutMembers(entity);
                     break;
             }
         }
@@ -90,17 +90,17 @@ namespace DTOMaker.MemBlocks
         /// <param name="entity"></param>
         private static void ExplicitLayoutMembers(TargetEntity entity)
         {
-            foreach (var member in entity.Members.Values.OrderBy(m => m.Sequence))
+            foreach (var member in entity.Members.Values.OrderBy(m => m.Sequence).OfType<MemBlockMember>())
             {
                 member.FieldLength = GetFieldLength(member);
             }
         }
 
         /// <summary>
-        /// Calculates offset and length for all members in sequential order
+        /// Calculates offset and length for all members in linear order
         /// </summary>
         /// <param name="entity"></param>
-        private static void SequentialLayoutMembers(TargetEntity baseEntity)
+        private static void LinearLayoutMembers(TargetEntity baseEntity)
         {
             if (baseEntity is not MemBlockEntity entity) return;
 
@@ -126,21 +126,20 @@ namespace DTOMaker.MemBlocks
                 return result;
             }
 
-            foreach (var member in entity.Members.Values.OrderBy(m => m.Sequence))
+            foreach (var member in entity.Members.Values.OrderBy(m => m.Sequence).OfType<MemBlockMember>())
             {
                 // allocate value bytes
                 int fieldLength = GetFieldLength(member);
                 // adjust field/array length for String types
                 if(member.MemberTypeName == "String")
                 {
-                    fieldLength = member.ArrayLength;
-                    member.ArrayLength = 0;
+                    fieldLength = member.StringLength;
                 }
 
                 member.FieldLength = fieldLength;
                 if (member.MemberIsArray)
                 {
-                    member.FieldOffset = Allocate(fieldLength * member.ArrayLength);
+                    member.FieldOffset = Allocate(fieldLength * member.ArrayCapacity);
                 }
                 else
                 {

@@ -21,12 +21,12 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyBase")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyBase")][Layout(LayoutMethod.Linear)]
                     public interface IMyBase
                     {
                     }
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO : IMyBase
                     {
                     }
@@ -57,12 +57,12 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyBase")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyBase")][Layout(LayoutMethod.Linear)]
                     public interface IMyBase
                     {
                     }
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO : IMyBase
                     {
                     }
@@ -93,13 +93,13 @@ namespace DTOMaker.MemBlocks.Tests
                 namespace MyOrg.Models
                 {
                     [Entity]
-                    [Id("MyBase")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyBase")][Layout(LayoutMethod.Linear)]
                     public interface IMyBase
                     {
                         [Member(1)] double BaseField1 { get; set; }
                     }
                     [Entity]
-                    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+                    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
                     public interface IMyDTO : IMyBase
                     {
                         [Member(1)] double DTOField1 { get; set; }

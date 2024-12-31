@@ -10,6 +10,15 @@ namespace DTOMaker.MemBlocks
 
         public LayoutMethod LayoutMethod => (Entity as MemBlockEntity)?.LayoutMethod ?? LayoutMethod.Undefined;
 
+        // todo? remove these flags if not used
+        public bool HasOffsetAttribute { get; set; }
+        public int StringLength { get; set; }
+        public int ArrayCapacity { get; set; }
+        public int FieldOffset { get; set; }
+        public int FieldLength { get; set; }
+        public int TotalLength => MemberIsArray ? FieldLength * ArrayCapacity : FieldLength;
+        public bool IsBigEndian { get; set; } = false;
+
         private SyntaxDiagnostic? CheckMemberType()
         {
             return MemberTypeName switch
@@ -49,7 +58,7 @@ namespace DTOMaker.MemBlocks
 
         private SyntaxDiagnostic? CheckHasOffsetAttribute()
         {
-            if (LayoutMethod == LayoutMethod.SequentialV1)
+            if (LayoutMethod == LayoutMethod.Linear)
                 return null;
 
             if (HasOffsetAttribute) return null;
@@ -70,70 +79,57 @@ namespace DTOMaker.MemBlocks
             };
         }
 
-        private SyntaxDiagnostic? CheckArrayLengthIsValid()
+        private static bool IsPowerOf2(int value, int minimum = 1, int maximum = 1024)
+        {
+            if (value < minimum) return false;
+            if (value > maximum) return false;
+            int comparand = 1;
+            while (true)
+            {
+                if (comparand > maximum) return false;
+                if (comparand >= minimum)
+                {
+                    // compare
+                    if (value == comparand) return true;
+                }
+                comparand = comparand * 2;
+            }
+        }
+
+        private SyntaxDiagnostic? CheckStringLengthIsValid()
+        {
+            if (MemberTypeName != "String") return null;
+            if (IsPowerOf2(StringLength, 1, 1024)) return null;
+            return new SyntaxDiagnostic(
+                        DiagnosticId.DMMB0009, "Invalid string length", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
+                        $"StringLength ({StringLength}) is invalid. StringLength must be a whole power of 2 between 1 and 1024.");
+        }
+
+        private SyntaxDiagnostic? CheckArrayCapacityIsValid()
         {
             if (!MemberIsArray) return null;
-            return ArrayLength switch
-            {
-                1 => null,
-                2 => null,
-                4 => null,
-                8 => null,
-                16 => null,
-                32 => null,
-                64 => null,
-                128 => null,
-                256 => null,
-                512 => null,
-                1024 => null,
-                _ => new SyntaxDiagnostic(
-                        DiagnosticId.DMMB0009, "Invalid array length", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
-                        $"ArrayLength ({ArrayLength}) is invalid. ArrayLength must be a whole power of 2 between 1 and 1024.")
-            };
+            if (IsPowerOf2(ArrayCapacity, 1, 1024)) return null;
+            return new SyntaxDiagnostic(
+                        DiagnosticId.DMMB0009, "Invalid array capacity", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
+                        $"ArrayCapacity ({ArrayCapacity}) is invalid. ArrayCapacity must be a whole power of 2 between 1 and 1024.");
         }
 
         private SyntaxDiagnostic? CheckFieldLengthIsValid()
         {
-            return FieldLength switch
-            {
-                1 => null,
-                2 => null,
-                4 => null,
-                8 => null,
-                16 => null,
-                32 => null,
-                64 => null,
-                128 => null,
-                256 => null,
-                512 => null,
-                1024 => null,
-                _ => new SyntaxDiagnostic(
+            if (IsPowerOf2(FieldLength, 1, 1024)) return null;
+            return new SyntaxDiagnostic(
                         DiagnosticId.DMMB0003, "Invalid field length", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
-                        $"FieldLength ({FieldLength}) is invalid. FieldLength must be a whole power of 2 between 1 and 1024.")
-            };
+                        $"FieldLength ({FieldLength}) is invalid. FieldLength must be a whole power of 2 between 1 and 1024.");
         }
 
         private SyntaxDiagnostic? CheckTotalLengthIsValid()
         {
             if (!MemberIsArray) return null;
-            int totalLength = FieldLength * ArrayLength;
-            return totalLength switch
-            {
-                1 => null,
-                2 => null,
-                4 => null,
-                8 => null,
-                16 => null,
-                32 => null,
-                64 => null,
-                128 => null,
-                256 => null,
-                512 => null,
-                1024 => null,
-                _ => new SyntaxDiagnostic(
-                        DiagnosticId.DMMB0009, "Invalid array length", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
-                        $"Total length ({totalLength}) is invalid. Total length must be a whole power of 2 between 1 and 1024.")
-            };
+            int totalLength = FieldLength * ArrayCapacity;
+            if (IsPowerOf2(totalLength, 1, 1024)) return null;
+            return new SyntaxDiagnostic(
+                        DiagnosticId.DMMB0009, "Invalid total length", DiagnosticCategory.Design, Location, DiagnosticSeverity.Error,
+                        $"Total length ({totalLength}) is invalid. Total length must be a whole power of 2 between 1 and 1024.");
         }
 
         protected override IEnumerable<SyntaxDiagnostic> OnGetValidationDiagnostics()
@@ -149,7 +145,8 @@ namespace DTOMaker.MemBlocks
             if ((diagnostic2 = CheckHasOffsetAttribute()) is not null) yield return diagnostic2;
             if ((diagnostic2 = CheckFieldOffsetIsValid()) is not null) yield return diagnostic2;
             if ((diagnostic2 = CheckFieldLengthIsValid()) is not null) yield return diagnostic2;
-            if ((diagnostic2 = CheckArrayLengthIsValid()) is not null) yield return diagnostic2;
+            if ((diagnostic2 = CheckStringLengthIsValid()) is not null) yield return diagnostic2;
+            if ((diagnostic2 = CheckArrayCapacityIsValid()) is not null) yield return diagnostic2;
             if ((diagnostic2 = CheckTotalLengthIsValid()) is not null) yield return diagnostic2;
         }
 

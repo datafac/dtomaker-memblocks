@@ -10,7 +10,7 @@ namespace MyOrg.Models
         MaxKind = ushort.MaxValue,
     }
     [Entity]
-    [Id("MyDTO")][Layout(LayoutMethod.SequentialV1)]
+    [Id("MyDTO")][Layout(LayoutMethod.Linear)]
     public interface IMyDTO
     {
         [Member(1)] double Field2_Value { get; set; }
@@ -19,7 +19,7 @@ namespace MyOrg.Models
 
         // fixed byte arary
         [Member(3)]
-        [Length(64)]
+        [Capacity(64)]
         ReadOnlyMemory<byte> Field3_Values { get; set; }
 
         [Member(4)]
