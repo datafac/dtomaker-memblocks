@@ -20,11 +20,8 @@ namespace DataFac.Memory
         public static void WriteToSpan(Span<byte> source, T_MemberType_ value) => Codec_Int32_LE.WriteToSpan(source, value);
     }
 }
-//##endif
-namespace T_NameSpace_.MemBlocks
+namespace T_BaseNameSpace_.MemBlocks
 {
-    //##if false
-    using T_BaseFullName_ = T_BaseName_;
     public interface IT_BaseName_
     {
         T_MemberType_ BaseField1 { get; set; }
@@ -122,13 +119,18 @@ namespace T_NameSpace_.MemBlocks
         public override bool Equals(object? obj) => obj is T_BaseName_ other && Equals(other);
         public override int GetHashCode() => base.GetHashCode();
     }
-    public interface IT_EntityName_ : IT_BaseName_
+}
+//##endif
+namespace T_NameSpace_.MemBlocks
+{
+    //##if false
+    public interface IT_EntityName_ : T_BaseNameSpace_.MemBlocks.IT_BaseName_
     {
         T_MemberType_ T_ScalarMemberName_ { get; set; }
         ReadOnlyMemory<T_MemberType_> T_VectorMemberName_ { get; set; }
     }
     //##endif
-    public partial class T_EntityName_ : T_BaseFullName_, IT_EntityName_, IEquatable<T_EntityName_>
+    public partial class T_EntityName_ : T_BaseNameSpace_.MemBlocks.T_BaseName_, IT_EntityName_, IEquatable<T_EntityName_>
     {
         // Derived entities: T_DerivedEntityCount_
         //##foreach DerivedEntities

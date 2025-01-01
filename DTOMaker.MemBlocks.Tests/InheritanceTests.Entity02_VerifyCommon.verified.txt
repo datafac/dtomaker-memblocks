@@ -12,7 +12,7 @@ using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
 namespace MyOrg.Models.MemBlocks
 {
-    public partial class MyBase : DTOMaker.Runtime.EntityBase, IMyBase, IEquatable<MyBase>
+    public partial class MyBase : DTOMaker.Runtime.MemBlocks.EntityBase, IMyBase, IEquatable<MyBase>
     {
         // Derived entities: 1
         // - MyDTO

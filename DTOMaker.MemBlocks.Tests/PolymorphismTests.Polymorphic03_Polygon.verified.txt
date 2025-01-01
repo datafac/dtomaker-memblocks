@@ -12,7 +12,7 @@ using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
 namespace MyOrg.Models.MemBlocks
 {
-    public partial class Polygon : DTOMaker.Runtime.EntityBase, IPolygon, IEquatable<Polygon>
+    public partial class Polygon : DTOMaker.Runtime.MemBlocks.EntityBase, IPolygon, IEquatable<Polygon>
     {
         // Derived entities: 6
         // - Equilateral
