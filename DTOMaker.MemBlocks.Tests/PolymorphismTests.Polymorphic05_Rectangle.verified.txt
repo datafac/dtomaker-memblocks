@@ -12,7 +12,7 @@ using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
 namespace MyOrg.Models.MemBlocks
 {
-    public partial class Rectangle : Quadrilateral, IRectangle, IEquatable<Rectangle>
+    public partial class Rectangle : MyOrg.Models.Quadrilateral, IRectangle, IEquatable<Rectangle>
     {
         // Derived entities: 0
 

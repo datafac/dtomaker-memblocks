@@ -10,20 +10,20 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
-namespace MyOrg.Models.MemBlocks
+namespace MyOrg.DomainB.MemBlocks
 {
-    public partial class RightTriangle : MyOrg.Models.Triangle, IRightTriangle, IEquatable<RightTriangle>
+    public partial class MyDTO : MyOrg.DomainA.MyBase, IMyDTO, IEquatable<MyDTO>
     {
         // Derived entities: 0
 
-        private const int ClassHeight = 3;
-        private const int BlockLength = 16;
+        private const int ClassHeight = 2;
+        private const int BlockLength = 0;
         private readonly Memory<byte> _writableBlock;
         private readonly ReadOnlyMemory<byte> _readonlyBlock;
 
-        public new const string EntityId = "RightTriangle";
+        public new const string EntityId = "MyOrg.DomainB.MyDTO";
 
-        public new static RightTriangle CreateFrom(string entityId, ReadOnlyMemory<ReadOnlyMemory<byte>> buffers)
+        public new static MyDTO CreateFrom(string entityId, ReadOnlyMemory<ReadOnlyMemory<byte>> buffers)
         {
             return entityId switch
             {
@@ -56,29 +56,25 @@ namespace MyOrg.Models.MemBlocks
         // -------------------- field map -----------------------------
         //  Seq.  Off.  Len.  N.    Type    End.  Name
         //  ----  ----  ----  ----  ------- ----  -------
-        //     1     0     8        Double  LE    Length
-        //     2     8     8        Double  LE    Height
         // ------------------------------------------------------------
 
-        public RightTriangle()
+        public MyDTO()
         {
             _readonlyBlock = _writableBlock = new byte[BlockLength];
         }
 
-        public RightTriangle(RightTriangle source, bool frozen = false) : base(source, frozen)
+        public MyDTO(MyDTO source, bool frozen = false) : base(source, frozen)
         {
             _writableBlock = source._writableBlock.ToArray();
             _readonlyBlock = _writableBlock;
         }
 
-        public RightTriangle(IRightTriangle source, bool frozen = false) : base(source, frozen)
+        public MyDTO(IMyDTO source, bool frozen = false) : base(source, frozen)
         {
             _readonlyBlock = _writableBlock = new byte[BlockLength];
-            this.Length = source.Length;
-            this.Height = source.Height;
         }
 
-        public RightTriangle(ReadOnlyMemory<ReadOnlyMemory<byte>> buffers) : base(buffers)
+        public MyDTO(ReadOnlyMemory<ReadOnlyMemory<byte>> buffers) : base(buffers)
         {
             ReadOnlyMemory<byte> source = buffers.Span[ClassHeight - 1];
             if (source.Length >= BlockLength)
@@ -95,36 +91,8 @@ namespace MyOrg.Models.MemBlocks
             _writableBlock = Memory<byte>.Empty;
         }
 
-        public Double Length
-        {
-            get
-            {
-                return (Double)Codec_Double_LE.ReadFromSpan(_readonlyBlock.Slice(0, 8).Span);
-            }
 
-            set
-            {
-                ThrowExceptionIfFrozen();
-                Codec_Double_LE.WriteToSpan(_writableBlock.Slice(0, 8).Span, value);
-            }
-        }
-
-        public Double Height
-        {
-            get
-            {
-                return (Double)Codec_Double_LE.ReadFromSpan(_readonlyBlock.Slice(8, 8).Span);
-            }
-
-            set
-            {
-                ThrowExceptionIfFrozen();
-                Codec_Double_LE.WriteToSpan(_writableBlock.Slice(8, 8).Span, value);
-            }
-        }
-
-
-        public bool Equals(RightTriangle? other)
+        public bool Equals(MyDTO? other)
         {
             if (ReferenceEquals(this, other)) return true;
             if (other is null) return false;
@@ -133,9 +101,9 @@ namespace MyOrg.Models.MemBlocks
             return true;
         }
 
-        public override bool Equals(object? obj) => obj is RightTriangle other && Equals(other);
-        public static bool operator ==(RightTriangle? left, RightTriangle? right) => left is not null ? left.Equals(right) : (right is null);
-        public static bool operator !=(RightTriangle? left, RightTriangle? right) => left is not null ? !left.Equals(right) : (right is not null);
+        public override bool Equals(object? obj) => obj is MyDTO other && Equals(other);
+        public static bool operator ==(MyDTO? left, MyDTO? right) => left is not null ? left.Equals(right) : (right is null);
+        public static bool operator !=(MyDTO? left, MyDTO? right) => left is not null ? !left.Equals(right) : (right is not null);
 
         private int CalcHashCode()
         {

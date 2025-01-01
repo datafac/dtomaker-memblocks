@@ -12,7 +12,7 @@ using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
 namespace MyOrg.Models.MemBlocks
 {
-    public partial class Triangle : Polygon, ITriangle, IEquatable<Triangle>
+    public partial class Triangle : MyOrg.Models.Polygon, ITriangle, IEquatable<Triangle>
     {
         // Derived entities: 2
         // - Equilateral

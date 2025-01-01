@@ -63,5 +63,44 @@ namespace DTOMaker.MemBlocks.Tests
             string outputCode = string.Join(Environment.NewLine, source.SourceText.Lines.Select(tl => tl.ToString()));
             await Verifier.Verify(outputCode);
         }
+
+        private readonly string inputSource2 =
+            """
+                using DTOMaker.Models;
+                using DTOMaker.Models.MessagePack;
+                namespace MyOrg.DomainA
+                {
+                    [Entity] [EntityKey(1)] public interface IMyBase { }
+                }
+                namespace MyOrg.DomainB
+                {
+                    [Entity] [EntityKey(2)] public interface IMyDTO : MyOrg.DomainA.IMyBase { }
+                }
+                """;
+
+        [Fact]
+        public async Task Domains05_BaseInOtherNamespaceA()
+        {
+            var generatorResult = GeneratorTestHelper.RunSourceGenerator(inputSource2, LanguageVersion.LatestMajor);
+
+            generatorResult.GeneratedSources.Length.Should().Be(2);
+            var source = generatorResult.GeneratedSources[0];
+
+            string outputCode = string.Join(Environment.NewLine, source.SourceText.Lines.Select(tl => tl.ToString()));
+            await Verifier.Verify(outputCode);
+        }
+
+        [Fact]
+        public async Task Domains06_BaseInOtherNamespaceB()
+        {
+            var generatorResult = GeneratorTestHelper.RunSourceGenerator(inputSource2, LanguageVersion.LatestMajor);
+
+            generatorResult.GeneratedSources.Length.Should().Be(2);
+            var source = generatorResult.GeneratedSources[1];
+
+            string outputCode = string.Join(Environment.NewLine, source.SourceText.Lines.Select(tl => tl.ToString()));
+            await Verifier.Verify(outputCode);
+        }
+
     }
 }

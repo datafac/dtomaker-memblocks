@@ -24,6 +24,7 @@ namespace DataFac.Memory
 namespace T_NameSpace_.MemBlocks
 {
     //##if false
+    using T_BaseFullName_ = T_BaseName_;
     public interface IT_BaseName_
     {
         T_MemberType_ BaseField1 { get; set; }
@@ -127,7 +128,7 @@ namespace T_NameSpace_.MemBlocks
         ReadOnlyMemory<T_MemberType_> T_VectorMemberName_ { get; set; }
     }
     //##endif
-    public partial class T_EntityName_ : T_BaseName_, IT_EntityName_, IEquatable<T_EntityName_>
+    public partial class T_EntityName_ : T_BaseFullName_, IT_EntityName_, IEquatable<T_EntityName_>
     {
         // Derived entities: T_DerivedEntityCount_
         //##foreach DerivedEntities

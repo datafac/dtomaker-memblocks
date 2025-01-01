@@ -12,7 +12,7 @@ using DataFac.Memory;
 using DTOMaker.Runtime.MemBlocks;
 namespace MyOrg.Models.MemBlocks
 {
-    public partial class Quadrilateral : Polygon, IQuadrilateral, IEquatable<Quadrilateral>
+    public partial class Quadrilateral : MyOrg.Models.Polygon, IQuadrilateral, IEquatable<Quadrilateral>
     {
         // Derived entities: 2
         // - Rectangle
